@@ -1,0 +1,22 @@
+/* Global styles */
+
+
+/* index.php styling */
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.89);
+    height: 100%;
+}
+
+/* Product style */
+.product {
+    min-height: 25vh;
+}
+
+
+
+/* add-product.php styling */
+
+.show-hide {
+    display: none;
+}
