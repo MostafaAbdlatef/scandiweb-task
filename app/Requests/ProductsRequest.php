@@ -31,93 +31,127 @@ class ProductsRequest extends Product
 
         return $this;
     }
-    //Very important============================
-    public function fieldRequired()
-    {
-        foreach ($_POST as $key => $value) {
-            if (empty($value)) {
-                $this->errors["$key-required"] = $this->required;
-            }
-        }
-        return $this->errors;
-    }
-    // ==========================================
+
     public function validateSku()
     {
-        $pattern = "/^[a-zA-Z]+[a-zA-Z0-9._]+$/";
-        if ($this->skuExists()) {
-            $this->errors['sku-exists'] = $this->exists;
-        } elseif (!preg_match($pattern, $this->getSku())) {
-            $this->errors['sku-invalid'] = $this->invalid;
+        if (empty($this->getSku())) {
+            return $this->errors['sku_error'] = $this->required;
+        } elseif (!preg_match("/^[a-zA-Z]+[a-zA-Z0-9._]+$/", $this->getSku())) {
+            return $this->errors['sku_error'] = $this->invalid;
+        } elseif ($this->skuExists()) {
+            return $this->errors['sku_error'] = $this->exists;
         }
-        return $this->errors;
     }
+
     public function validateName()
     {
-        $pattern = "/^[a-zA-Z][a-zA-Z ]*$/";
-        if (!preg_match($pattern, $this->getName())) {
-            $this->errors['name-invalid'] = $this->invalid;
+        if (empty($this->getName())) {
+            return $this->errors['name_error'] = $this->required;
+        } elseif (!preg_match("/^[a-zA-Z][a-zA-Z ]*$/", $this->getName())) {
+            return $this->errors['name_error'] = $this->invalid;
         }
-        return $this->errors;
     }
+
     public function validatePrice()
     {
-        $pattern = "/^[0-9]+(\.[0-9]{2})?$/";
-        if (!preg_match($pattern, $this->getPrice())) {
-            $this->errors['price-invalid'] = $this->invalid;
+        if (empty($this->getPrice())) {
+            return $this->errors['price_error'] = $this->required;
+        } elseif (!preg_match("/^[0-9]+(\.[0-9]{2})?$/", $this->getPrice())) {
+            return $this->errors['price_error'] = $this->invalid;
         }
-        return $this->errors;
+    }
+    public function validateType()
+    {
+        if (empty($this->getType())) {
+            return $this->errors['type_error'] = $this->required;
+        }
+    }
+    public function validateSize()
+    {
+        if (empty($this->getSize())) {
+            return $this->errors['size_error'] = $this->required;
+        } elseif (!preg_match("/^[0-9]+([0-9]+)?$/", $this->getSize())) {
+            return $this->errors['size_error'] = $this->invalid;
+        }
+    }
+    public function validateLength()
+    {
+        if (empty($this->getLength())) {
+            return $this->errors['length_error'] = $this->required;
+        } elseif (!preg_match("/^[0-9]+(\.[0-9]{2})?$/", $this->getLength())) {
+            return $this->errors['length_error'] = $this->invalid;
+        }
+    }
+    public function validateWidth()
+    {
+        if (empty($this->getWidth())) {
+            return $this->errors['width_error'] = $this->required;
+        } elseif (!preg_match("/^[0-9]+(\.[0-9]{2})?$/", $this->getWidth())) {
+            return $this->errors['width_error'] = $this->invalid;
+        }
+    }
+    public function validateHeight()
+    {
+        if (empty($this->getHeight())) {
+            return $this->errors['height_error'] = $this->required;
+        } elseif (!preg_match("/^[0-9]+(\.[0-9]{2})?$/", $this->getHeight())) {
+            return $this->errors['height_error'] = $this->invalid;
+        }
+    }
+    public function validateWeight()
+    {
+        if (empty($this->getWeight())) {
+            return $this->errors['weight_error'] = $this->required;
+        } elseif (!preg_match("/^[0-9]+(\.[0-9]{2})?$/", $this->getWeight())) {
+            return $this->errors['weight_error'] = $this->invalid;
+        }
     }
 }
 
+// Save button
 if ($_POST) {
-
 
     $registeration = new ProductsRequest;
     //Setting values of object from request
     $registeration->setSku($_POST['sku']);
     $registeration->setName($_POST['name']);
     $registeration->setPrice($_POST['price']);
-    $registeration->setType($_POST['product-type']);
+    isset($_POST['type']) ? $registeration->setType($_POST['type']) : null;
     isset($_POST['size']) ? $registeration->setSize($_POST['size']) : null;
     isset($_POST['length']) ? $registeration->setLength($_POST['length']) : null;
     isset($_POST['width']) ? $registeration->setWidth($_POST['width']) : null;
     isset($_POST['height']) ? $registeration->setHeight($_POST['height']) : null;
     isset($_POST['weight']) ? $registeration->setWeight($_POST['weight']) : null;
-    
-    $_SESSION['old-values'] = $_POST;
-    //Experiment
-    $requiredValidation = $registeration->fieldRequired();
-    if ($requiredValidation) {
 
-        foreach ($requiredValidation as $key => $value) {
-            $fieldName = substr($key, 0, strpos($key, '-'));
-            $_SESSION['validation']["$fieldName-validation"]["$key"] = $value;
-        }
+    // validation
+    $registeration->validateSku();
+    $registeration->validateName();
+    $registeration->validatePrice();
+    $registeration->validateType();
+    isset($_POST['size']) ? $registeration->validateSize() : null;
+    isset($_POST['length']) ? $registeration->validateLength() : null;
+    isset($_POST['width']) ? $registeration->validateWidth() : null;
+    isset($_POST['height']) ? $registeration->validateHeight() : null;
+    isset($_POST['weight']) ? $registeration->validateWeight() : null;
 
-        $skuValidation = $registeration->validateSku();
-        if ($skuValidation) {
-            foreach ($skuValidation as $key => $value) {
-                if ($key == 'sku-exists') {
-                    $_SESSION['validation']['sku-validation']['sku-exists'] = $value;
-                } elseif ($key == 'sku-invalid') {
-                    $_SESSION['validation']['sku-validation']['sku-invalid'] = $value;
-                }
-            }
-            header('location:../../add-product.php');
-        }
-        $nameValidation = $registeration->validateName();
-        if ($nameValidation) {
-            foreach ($nameValidation as $key => $value) {
-                if ($key == 'name-invalid') {
-                    $_SESSION['validation']['name-validation']['name-invalid'] = $value;
-                }
-            }
-            header('location:../../add-product.php');
-        }
-    } else {
+
+    if (count($registeration->getErrors()) == 0) {
         $registeration->create();
-        unset($_SESSION['old-values']);
+    }
+
+    $output = $registeration->getErrors();
+    echo json_encode($output);
+}
+// Delete button 
+if (isset($_POST['delete-multi-prod'])) {
+    if (empty($_POST['product-delete'])) {
+        header('location:../../index.php');
+    } else {
+        $deleteProduct = new ProductsRequest;
+        $all_id = $_POST['product-delete'];
+        $extract_id = implode(',', $all_id);
+        $deleteProduct->setId($extract_id);
+        $deleteProduct->delete();
         header('location:../../index.php');
     }
 }
