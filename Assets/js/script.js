@@ -10,7 +10,7 @@ var elems = document.getElementsByClassName("show-hide");
 
 // Event that shows only the div of the selected option
 
-document.querySelector("#product-type").addEventListener("change", function () {
+document.querySelector("#productType").addEventListener("change", function () {
   for (i = 0; i < elems.length; i++) {
     if (options[i] == this.value) {
       elems[i].style.display = "block";
@@ -39,7 +39,6 @@ function saveData() {
   for (var count = 0; count < formElement.length; count++) {
     formData.append(formElement[count].name, formElement[count].value);
   }
-  // formData.append(saveBtn)
 
   document.getElementById('submit').disabled = true;
 
@@ -54,8 +53,6 @@ function saveData() {
       document.getElementById('submit').disabled = false;
 
       var response = JSON.parse(ajax_request.responseText);
-
-      
 
 
       typeof response.sku_error === 'undefined' ? document.getElementById('sku-error').innerHTML = '' : document.getElementById('sku-error').innerHTML = response.sku_error;

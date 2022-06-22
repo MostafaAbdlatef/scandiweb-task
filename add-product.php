@@ -12,7 +12,7 @@ require_once "app/Requests/ProductsRequest.php";
             <div class="h1 text-warning">Product Add</div>
         </div>
         <div class="col-1">
-            <button type="submit" name="save" onclick="saveData()" form="product-form" id="submit" class="btn btn-outline-success">Save</button>
+            <button type="submit" onclick="saveData()" form="product_form" id="submit" class="btn btn-outline-success">Save</button>
         </div>
         <div class="col-2">
             <a href="index.php" class="btn btn-outline-danger">Cancel</a>
@@ -20,7 +20,7 @@ require_once "app/Requests/ProductsRequest.php";
     </div>
     <!-- form -->
     <div class="row py-5">
-        <form id="product-form" class="col-4" method="POST" action="app/Requests/ProductsRequest.php">
+        <form id="product_form" class="col-4" method="POST" action="app/Requests/ProductsRequest.php">
             <!-- sku field -->
             <div class="form-row">
                 <div class="form-group col-12">
@@ -44,7 +44,7 @@ require_once "app/Requests/ProductsRequest.php";
             <!-- product type field -->
             <div class="form-row">
                 <div class="form-group col-8">
-                    <select id="product-type" name="type" class="form-control form-data">
+                    <select id="productType" name="type" class="form-control form-data">
                         <option disabled selected>Type switcher</option>
                         <option value="dvd">DVD</option>
                         <option value="furniture">Furniture</option>
