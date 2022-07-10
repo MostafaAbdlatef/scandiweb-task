@@ -45,7 +45,7 @@ require_once "app/Requests/ProductsRequest.php";
             <div class="form-row">
                 <div class="form-group col-8">
                     <select id="productType" name="type" class="form-control form-data">
-                        <option disabled selected>Type switcher</option>
+                        <option selected value="">Type switcher</option>
                         <option value="dvd">DVD</option>
                         <option value="furniture">Furniture</option>
                         <option value="book">Book</option>

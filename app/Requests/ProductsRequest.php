@@ -147,9 +147,6 @@ if ($_POST) {
         isset($_POST['height']) ? $registeration->validateHeight() : null;
         isset($_POST['weight']) ? $registeration->validateWeight() : null;
 
-        // echo "<pre>";
-        // print_r($registeration->getErrors());
-        // echo "</pre>";
         if (count($registeration->getErrors()) == 0) {
             $registeration->create();
         }
